@@ -26,7 +26,7 @@ orElse' (Left' e) b = b
 orElse' a _ = a
 
 map2' :: (a -> b -> c) -> Either' e a -> Either' e b -> Either' e c
-map2' f a b = flatMap' (\y -> map' (\x -> f x y) a) b
+map2' f a b = flatMap' (\x -> map' (\y -> f x y) b) a
 
 
 -- 4.7
