@@ -69,3 +69,16 @@ traverse' :: (a -> Option b) -> [a] -> Option [b]
 traverse' _ [] = None
 traverse' f (x:[]) = map' (:[]) (f x)
 traverse' f (x:xs) = map2' (:) (f x) (traverse' f xs)
+
+
+sum' :: Num a => [Option a] -> Option a
+sum' [] = None
+-- sum' ((Some x):[]) = Some [x]
+-- sum' (None:[]) = None
+sum' (x:[]) = map2' (+) x (Some 0) 
+sum' (x:xs) = map2' (+) x (sum' xs)
+-- 이렇게 구현한 sum' 은 중간에 None이 나오면 전체 계산을 중지할까?
+
+foldRight' :: (a -> b -> b) -> b -> [Option a] -> Option b
+foldRight' _ b [] = Some b
+foldRight' f b (x:xs) = map2' f x (foldRight' f b xs)
