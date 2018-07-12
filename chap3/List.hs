@@ -66,6 +66,10 @@ setHead x Empty = cons (x, Empty)
 setHead x (List _ xs) = cons (x, xs)
 
 
+take' :: Int -> List a -> List a
+take' 0 xs = Empty
+take' n (List x xs) = List x (take' (n-1) xs)
+
 drop' :: Int -> List a -> List a
 drop' 0 xs = xs 
 drop' _ Empty = error "empty..."

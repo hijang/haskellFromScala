@@ -33,3 +33,25 @@ map2' f a b = flatMap' (\x -> map' (\y -> f x y) b) a
 traverse' :: (a -> Either' e b) -> [a] -> Either' e [b]
 traverse' _ [] = Right' []
 traverse' f (x:xs) = map2' (:) (f x) (traverse' f xs)
+
+sequence' :: [Either' e a] -> Either' e [a]
+sequence' xs = traverse' id xs
+
+
+-- 4.8
+
+data Name s = Name { n :: s } deriving (Show)
+data Age n = Age { a :: n } deriving (Show)
+data Person s n = Person { name :: Name s, age :: Age n} deriving (Show)
+
+makeName :: String -> Either' String (Name String)
+makeName [] = Left' "empty name"
+makeName str = Right' (Name str)
+
+makeAge :: Int -> Either' String (Age Int)
+makeAge n = if n < 1 then Left' "invalid age" else Right' (Age n)
+
+-- Person 타입 기술을 이렇게 하는게 맞는지 잘 모르겠다.
+makePerson :: String -> Int -> Either' String (Person String Int) 
+makePerson name age = map2' Person (makeName name) (makeAge age)
+
